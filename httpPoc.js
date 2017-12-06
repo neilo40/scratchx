@@ -16,7 +16,7 @@ new (function() {
         console.log('Sending request');
         // Do http request
         var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", "http://localhost:6001/api/player", false); 
+        xmlHttp.open("GET", "http://localhost:6001/api/player", true); 
         callback();
     };
 
