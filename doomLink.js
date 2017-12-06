@@ -1,4 +1,4 @@
-// PoC code for making an http request
+// Interface with restful doom
 
 new (function() {
     var ext = this;
@@ -12,22 +12,23 @@ new (function() {
         return {status: 2, msg: 'Ready'};
     };
 
-    ext.send_http = function(callback) {
-        console.log('Sending request');
-        // Do http request
+    ext.move_forward = function(callback) {
+        console.log("Moving forward");
         var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", "http://localhost:6001/api/player", true); 
-	xmlHttp.send(null);
+        xmlHttp.open("POST", "http://localhost:6001/api/player/actions", true); 
+	xmlHttp.setRequestHeader("Content-type", "application/json");
+        var data = JSON.stringify({"type": "forward"});
+	xmlHttp.send(data);
         callback();
     };
 
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-            ['w', 'send http request', 'send_http'],
+            ['w', 'move forward', 'move_forward'],
         ]
     };
 
     // Register the extension
-    ScratchExtensions.register('HTTP request PoC', descriptor, ext);
+    ScratchExtensions.register('restful-doom interface', descriptor, ext);
 })();
