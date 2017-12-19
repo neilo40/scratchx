@@ -20,6 +20,18 @@ new (function() {
         xmlHttp.send(data);
     }
 
+    var get_action = function(endpoint, callback) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() {
+            if (xmlHttp.readyState == XMLHttpRequest.DONE) {
+                callback(xmlHttp.response["health"]);
+            }
+        }
+        xmlHttp.open("GET", "http://localhost:6001/api/" + endpoint, true); 
+        xmlHttp.setRequestHeader("Content-type", "application/json");
+        xmlHttp.send(null);
+    }
+
     ext.move_forward = function(callback) {
         console.log("Moving forward");
         post_action("forward");
@@ -50,6 +62,11 @@ new (function() {
         callback();
     };
 
+    ext.health = function(callback) {
+        console.log("Getting health");
+        get_action("player", callback);
+    };
+ 
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
@@ -57,7 +74,8 @@ new (function() {
             ['w', 'move backward', 'move_backward'],
             ['w', 'turn right', 'turn_right'],
             ['w', 'turn left', 'turn_left'],
-            ['w', 'shoot', 'shoot']
+            ['w', 'shoot', 'shoot'],
+            ['R', 'player health', 'health']
         ]
     };
 
