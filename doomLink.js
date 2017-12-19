@@ -20,11 +20,15 @@ new (function() {
         xmlHttp.send(data);
     }
 
-    var get_action = function(endpoint, callback) {
+    var get_action = function(endpoint, field, callback) {
         var xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() {
             if (xmlHttp.readyState == XMLHttpRequest.DONE) {
-                callback(xmlHttp.response["health"]);
+                if (field == "ammo"){
+                    callback(JSON.parse(xmlHttp.response)["ammo"]["Bullets"]);
+                } else {
+                    callback(JSON.parse(xmlHttp.response)[field]);
+                }
             }
         }
         xmlHttp.open("GET", "http://localhost:6001/api/" + endpoint, true); 
@@ -64,7 +68,12 @@ new (function() {
 
     ext.health = function(callback) {
         console.log("Getting health");
-        get_action("player", callback);
+        get_action("player", "health", callback);
+    };
+ 
+    ext.ammo = function(callback) {
+        console.log("Getting ammo");
+        get_action("player", "ammo", callback);
     };
  
     // Block and block menu descriptions
@@ -75,7 +84,8 @@ new (function() {
             ['w', 'turn right', 'turn_right'],
             ['w', 'turn left', 'turn_left'],
             ['w', 'shoot', 'shoot'],
-            ['R', 'player health', 'health']
+            ['R', 'player health', 'health'],
+            ['R', 'player ammo', 'ammo']
         ]
     };
 
